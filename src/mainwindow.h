@@ -1,22 +1,31 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef BROWSER_MAINWINDOW_H
+#define BROWSER_MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QToolButton>
+#include <QLabel>
+#include <QPushButton>
+
+#include <memory>
+
+namespace Browser {
 
 namespace Ui {
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow
+class MainWindow final : public QMainWindow
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	explicit MainWindow(QWidget *parent = 0);
-	~MainWindow();
+    explicit MainWindow(QWidget *parent = 0);
+    virtual ~MainWindow();
 
 private:
-	Ui::MainWindow *ui;
+    std::unique_ptr<Ui::MainWindow> ui;
 };
 
-#endif // MAINWINDOW_H
+
+} // namespace Browser
+#endif // BROWSER_MAINWINDOW_H
