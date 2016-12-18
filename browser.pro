@@ -17,14 +17,17 @@ SOURCES += src/main.cpp \
     src/mainwindow.cpp \
     src/mainform.cpp \
     src/tabbar.cpp \
-    src/tabwidget.cpp
+    src/tabwidget.cpp \
+    src/historydialog.cpp
 
 HEADERS  += \
     src/mainwindow.h \
     src/mainform.h \
     src/tabbar.h \
-    src/tabwidget.h
+    src/tabwidget.h \
+    src/historydialog.h
 
 FORMS    += \
     src/mainwindow.ui \
-    src/mainform.ui
+    src/mainform.ui \
+    src/historydialog.ui

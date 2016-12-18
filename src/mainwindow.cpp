@@ -3,8 +3,7 @@
 
 #include "mainform.h"
 #include "tabbar.h"
-
-const QString fileName = "MainWindow.ini";
+//#include "historydialog.h"
 
 namespace Browser
 {
@@ -12,7 +11,7 @@ namespace Browser
   MainWindow::MainWindow(QWidget *parent) :
     QMainWindow {parent},
     ui {new Ui::MainWindow},
-  settings(fileName , QSettings::IniFormat)
+  settings(qApp->applicationName() + ".ini" , QSettings::IniFormat),hd(nullptr)
   {
     ui->setupUi(this);
     //Считать настройки окна
@@ -25,6 +24,9 @@ namespace Browser
     [this](int tab) {
       ui->tabWidget->removeTab(tab);
     });
+    //соединение для вызова окна истории
+    connect(ui->btnHistory, SIGNAL(clicked(bool)), this, SLOT(ShowHistory()), Qt::UniqueConnection);
+    //
     emit ui->pushButton->clicked();
   }
 
@@ -40,12 +42,23 @@ namespace Browser
   void MainWindow::LoadSettings()
   {
     //      qDebug() << "FILE" << fileName << " DOESN'T EXIST" << endl;
-    if (QFile::exists(fileName)) {
+    if (QFile::exists(qApp->applicationName() + ".ini")) {
       settings.beginGroup(this->objectName());
       restoreGeometry(settings.value("geometry").toByteArray());
       restoreState(settings.value("state", QByteArray()) .toByteArray());
       settings.endGroup();
     }
+  }
+
+  void MainWindow::ShowHistory()
+  {
+    //Создаем окно истории
+    //    HistoryDialog *hd = new HistoryDialog(this);
+    if (hd == nullptr)
+      hd = new HistoryDialog(this);
+
+    hd->show();
+    //    delete hd;
   }
 
   MainWindow::~MainWindow() = default;

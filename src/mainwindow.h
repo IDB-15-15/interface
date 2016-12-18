@@ -9,6 +9,7 @@
 #include <QtGui>
 
 #include <memory>
+#include "historydialog.h"
 
 namespace Browser
 {
@@ -37,6 +38,9 @@ namespace Browser
     private:
       std::unique_ptr<Ui::MainWindow> ui;
       QSettings settings;
+      HistoryDialog *hd;
+    private slots:
+      void ShowHistory();
   };
 
 
