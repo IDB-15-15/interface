@@ -18,14 +18,16 @@ SOURCES += src/main.cpp \
     src/mainform.cpp \
     src/tabbar.cpp \
     src/tabwidget.cpp \
-    src/historydialog.cpp
+    src/historydialog.cpp \
+    src/messdialog.cpp
 
 HEADERS  += \
     src/mainwindow.h \
     src/mainform.h \
     src/tabbar.h \
     src/tabwidget.h \
-    src/historydialog.h
+    src/historydialog.h \
+    src/messdialog.h
 
 FORMS    += \
     src/mainwindow.ui \

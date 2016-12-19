@@ -4,6 +4,7 @@
 #include <QWidget>
 
 #include <memory>
+#include "historydialog.h"
 
 namespace Browser {
 
@@ -22,6 +23,7 @@ public:
 
 private:
     std::unique_ptr<Ui::MainForm> ui;
+    HistoryDialog *hd;
 };
 
 

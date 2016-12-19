@@ -11,10 +11,10 @@ namespace Browser
   MainWindow::MainWindow(QWidget *parent) :
     QMainWindow {parent},
     ui {new Ui::MainWindow},
-  settings(qApp->applicationName() + ".ini" , QSettings::IniFormat),hd(nullptr)
+  settings(qApp->applicationName() + ".ini" , QSettings::IniFormat),hd(new HistoryDialog(this))
   {
     ui->setupUi(this);
-    //Ñ÷èòàòü íàñòðîéêè îêíà
+    //Ð¡Ñ‡Ð¸Ñ‚Ð°Ñ‚ÑŒ Ð½Ð°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸ Ð¾ÐºÐ½Ð°
     LoadSettings();
     connect(ui->pushButton, &QPushButton::clicked,
     [this] {
@@ -24,8 +24,8 @@ namespace Browser
     [this](int tab) {
       ui->tabWidget->removeTab(tab);
     });
-    //ñîåäèíåíèå äëÿ âûçîâà îêíà èñòîðèè
-    connect(ui->btnHistory, SIGNAL(clicked(bool)), this, SLOT(ShowHistory()), Qt::UniqueConnection);
+    //ÑÐ¾ÐµÐ´Ð¸Ð½ÐµÐ½Ð¸Ðµ Ð´Ð»Ñ Ð²Ñ‹Ð·Ð¾Ð²Ð° Ð¾ÐºÐ½Ð° Ð¸ÑÑ‚Ð¾Ñ€Ð¸Ð¸
+    connect(ui->btnHistory, SIGNAL(clicked(bool)), hd, SLOT(show()), Qt::UniqueConnection);
     //
     emit ui->pushButton->clicked();
   }
@@ -50,16 +50,7 @@ namespace Browser
     }
   }
 
-  void MainWindow::ShowHistory()
-  {
-    //Ñîçäàåì îêíî èñòîðèè
-    //    HistoryDialog *hd = new HistoryDialog(this);
-    if (hd == nullptr)
-      hd = new HistoryDialog(this);
 
-    hd->show();
-    //    delete hd;
-  }
 
   MainWindow::~MainWindow() = default;
 

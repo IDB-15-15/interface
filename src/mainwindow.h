@@ -40,7 +40,6 @@ namespace Browser
       QSettings settings;
       HistoryDialog *hd;
     private slots:
-      void ShowHistory();
   };
 
 
