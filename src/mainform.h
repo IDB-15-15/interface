@@ -5,6 +5,8 @@
 
 #include <memory>
 #include "historydialog.h"
+//#include "mainwindow.h"
+
 
 namespace Browser {
 
@@ -16,7 +18,8 @@ class MainForm : public QWidget {
     Q_OBJECT
 
 public:
-    explicit MainForm(QWidget *parent = 0);
+    explicit MainForm(QWidget *parent=nullptr, HistoryDialog *hd_=nullptr);
+
     virtual ~MainForm();
 
     void go();
@@ -24,6 +27,7 @@ public:
 private:
     std::unique_ptr<Ui::MainForm> ui;
     HistoryDialog *hd;
+private slots:
 };
 
 

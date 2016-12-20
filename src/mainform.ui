@@ -52,13 +52,6 @@
    <item>
     <widget class="QPlainTextEdit" name="plainTextEditContent"/>
    </item>
-   <item>
-    <widget class="QPushButton" name="pushButton">
-     <property name="text">
-      <string>PushButton</string>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <resources/>

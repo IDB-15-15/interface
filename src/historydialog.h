@@ -19,22 +19,17 @@ class HistoryDialog : public QDialog
     explicit HistoryDialog(QWidget *parent = 0);
     ~HistoryDialog();
 
+    void addUrl(QString url, QString site_name);
   private:
     Ui::HistoryDialog *ui;
     QTreeWidgetItem *addTreeRootDate(QTreeWidget *ptrTree);
-    void DeleteUrl (QTreeWidgetItem *currentItem);
-    void InsertItem (QTreeWidgetItem *parent, QString url);
-private slots:
-    void addUrl(QTreeWidget *ptrTree,
-                         QString url);
+    void DeleteUrl(QTreeWidgetItem *currentItem);
+    void InsertItem(QTreeWidgetItem *parent, QString url, QString site_name);
+  private slots:
     void RemoveItem();
     void RemoveItems();
-    void addUrlTest(QTreeWidget *ptrTree,
-                    QString url)
-{
-        qDebug()<<url;
-}
-
+    void SelectItem(QTreeWidgetItem *item, int index);
+    void CallSite(QTreeWidgetItem *item, int index);
 };
 
 #endif // HISTORYDIALOG_H

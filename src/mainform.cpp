@@ -9,9 +9,10 @@
 namespace Browser
 {
 
-  MainForm::MainForm(QWidget *parent) :
+  MainForm::MainForm(QWidget *parent, HistoryDialog *hd_) :
     QWidget {parent},
     ui {new Ui::MainForm}
+  ,hd(hd_)
   {
     ui->setupUi(this);
     //UPD. URL на латинице. Если нужно распознавать и кириллические домены,
@@ -29,9 +30,7 @@ namespace Browser
     //    edit->setValidator(validator);
     ui->omniBox->setValidator(validator);
     //
-    connect(ui->omniBox, &QLineEdit::returnPressed, this, &MainForm::go);
-    //соединить строку ввода URL со слотом ввода истории
-//    connect(ui->omniBox, &QLineEdit::returnPressed, , &MainForm::go);
+    connect(ui->omniBox, &QLineEdit::returnPressed, this, &MainForm::go, Qt::UniqueConnection);
   }
 
   MainForm::~MainForm() = default;
@@ -39,7 +38,11 @@ namespace Browser
   void MainForm::go()
   {
     QNetworkAccessManager manager;
-    QNetworkReply *response = manager.get(QNetworkRequest {QUrl {ui->omniBox->text()}});
+    //Запись URL в историю посещений сайтов
+    QString url= ui->omniBox->text();
+    hd->addUrl(url,"Наименование сайта");
+//    QNetworkReply *response = manager.get(QNetworkRequest {QUrl {ui->omniBox->text()}});
+    QNetworkReply *response = manager.get(QNetworkRequest {QUrl {url}});
     QEventLoop event;
     connect(response, &QNetworkReply::finished, &event, &QEventLoop::quit);
     event.exec();

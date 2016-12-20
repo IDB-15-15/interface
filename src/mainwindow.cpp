@@ -18,7 +18,7 @@ namespace Browser
     LoadSettings();
     connect(ui->pushButton, &QPushButton::clicked,
     [this] {
-      ui->tabWidget->addTab(new MainForm {}, QString {});
+      ui->tabWidget->addTab(new MainForm (this,hd), QString {});
     });
     connect(ui->tabWidget, &QTabWidget::tabCloseRequested,
     [this](int tab) {
@@ -49,8 +49,6 @@ namespace Browser
       settings.endGroup();
     }
   }
-
-
 
   MainWindow::~MainWindow() = default;
 
