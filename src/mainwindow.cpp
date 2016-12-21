@@ -11,7 +11,8 @@ namespace Browser
   MainWindow::MainWindow(QWidget *parent) :
     QMainWindow {parent},
     ui {new Ui::MainWindow},
-  settings(qApp->applicationName() + ".ini" , QSettings::IniFormat),hd(new HistoryDialog(this))
+  settings(qApp->applicationName() + ".ini" , QSettings::IniFormat),
+    hd(new HistoryDialog(this))
   {
     ui->setupUi(this);
     //Считать настройки окна

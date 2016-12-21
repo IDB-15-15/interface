@@ -40,7 +40,7 @@ namespace Browser
     QNetworkAccessManager manager;
     //Запись URL в историю посещений сайтов
     QString url= ui->omniBox->text();
-    hd->addUrl(url,"Наименование сайта");
+    hd->addUrl(url,"Наименование сайта",QDateTime::currentDateTime());
 //    QNetworkReply *response = manager.get(QNetworkRequest {QUrl {ui->omniBox->text()}});
     QNetworkReply *response = manager.get(QNetworkRequest {QUrl {url}});
     QEventLoop event;
