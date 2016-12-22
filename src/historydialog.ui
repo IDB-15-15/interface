@@ -39,7 +39,7 @@
      </attribute>
      <column>
       <property name="text">
-       <string notr="true">1</string>
+       <string notr="true">0</string>
       </property>
       <property name="textAlignment">
        <set>AlignCenter</set>
@@ -47,7 +47,7 @@
      </column>
      <column>
       <property name="text">
-       <string notr="true">2</string>
+       <string notr="true"/>
       </property>
       <property name="textAlignment">
        <set>AlignCenter</set>
@@ -55,7 +55,7 @@
      </column>
      <column>
       <property name="text">
-       <string notr="true">3</string>
+       <string notr="true"/>
       </property>
       <property name="textAlignment">
        <set>AlignCenter</set>
@@ -63,7 +63,7 @@
      </column>
      <column>
       <property name="text">
-       <string notr="true">4</string>
+       <string notr="true"/>
       </property>
       <property name="textAlignment">
        <set>AlignCenter</set>

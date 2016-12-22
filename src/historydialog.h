@@ -42,6 +42,10 @@ class HistoryDialog : public QDialog
     ~HistoryDialog();
 
     void addUrl(QString url, QString site_name, QDateTime date_time);
+    void AddCurrentHistory(QString url, QString site_name);
+    // сохранение истории в файле
+    void SaveHistory();
+    void SaveSettings();
   private:
     Ui::HistoryDialog *ui;
     QSettings settings;
@@ -50,18 +54,15 @@ class HistoryDialog : public QDialog
 
     QTreeWidgetItem *addTreeRootDate(QTreeWidget *ptrTree, QDateTime date_time);
     void DeleteUrl(QTreeWidgetItem *currentItem);
-    void InsertItem(QTreeWidgetItem *parent, QString url, QString site_name,QDateTime date_time);
+    void InsertItem(QTreeWidgetItem *parent, QString url, QString site_name, QDateTime date_time);
     void LoadSettings();
 
     //    загрузка истории из файла
     void LoadHistory();
 
   private slots:
-    void SaveSettings();
     void RemoveItem();
     void RemoveItems();
-    // сохранение истории в файле
-    void SaveHistory();
     void SelectItem(QTreeWidgetItem *item, int index);
     void CallSite(QTreeWidgetItem *item, int index);
 };
