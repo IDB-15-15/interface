@@ -1,9 +1,0 @@
-project interface
-	: requirements <cxxflags>-fPIC <threading>multi <include>../render/src <include>../parser/src
-	: default-build <variant>release
-	: build-dir build
-	;
-
-use-project render : ../render ;
-
-build-project src ;
