@@ -26,8 +26,13 @@ namespace Browser
     public:
       explicit MainWindow(QWidget *parent = 0);
       virtual ~MainWindow();
+
     private:
-      void closeEvent(QCloseEvent *event);
+      void closeEvent(QCloseEvent *event)
+      {
+        SaveSettings();
+        event->accept();
+      }
       void SaveSettings();
       void LoadSettings();
     private:

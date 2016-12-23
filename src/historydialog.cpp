@@ -10,7 +10,7 @@
 HistoryDialog::HistoryDialog(QWidget *parent) :
   QDialog(parent),
   ui(new Ui::HistoryDialog),
-  settings(QCoreApplication::applicationName() + QLatin1String(".ini") , QSettings::IniFormat),
+  settings(qApp->applicationName() + ".ini" , QSettings::IniFormat),
   HistoryFileName(QCoreApplication::applicationName() + QLatin1String(".his")),
   HistoryChanged(false)
 {
@@ -27,6 +27,9 @@ HistoryDialog::HistoryDialog(QWidget *parent) :
   connect(ui->btnRemoveAll, SIGNAL(clicked(bool)), this, SLOT(RemoveItems()), Qt::UniqueConnection);
   //связываем кнопку Remove с соответствующим слотом
   connect(ui->btnRemove, SIGNAL(clicked(bool)), this, SLOT(RemoveItem()), Qt::UniqueConnection);
+  //связываем закрытие окна со слотами SaveSettings и SaveHistory
+  connect(this, SIGNAL(rejected()), this, SLOT(SaveSettings()));
+  connect(this, SIGNAL(rejected()), this, SLOT(SaveHistory()));
   //Соединение для выбранной записи
   //    connect(ui->tree, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)), this, SLOT(SelectItem(QTreeWidgetItem *, int)));
   //test
@@ -48,18 +51,15 @@ HistoryDialog::~HistoryDialog()
   delete ui;
 }
 
-void HistoryDialog::AddCurrentHistory(QString url, QString site_name)
-{
-  addUrl(url, site_name, QDateTime::currentDateTime());
-}
-
 QTreeWidgetItem *HistoryDialog::addTreeRootDate(QTreeWidget *ptrTree, QDateTime date_time)
 {
   QTreeWidgetItem *ptrItem;
   ptrItem = new QTreeWidgetItem(ptrTree);
   ptrItem->setText(0, date_time.toString("yyyy.MM.dd hh:mm:ss"));
   ptrItem->setText(1, date_time.toString("dd.MM.yyyy"));
+  //  ptrItem->setText(4, QDateTime::currentDateTime().toString("yyyy.MM.dd hh:mm:ss"));
   ptrItem->setExpanded(true);
+  //  ptrItem->setDisabled(true);
   return ptrItem;
 }
 
@@ -68,10 +68,12 @@ void HistoryDialog::addUrl(QString url, QString site_name, QDateTime date_time)
   QString date;
   QTreeWidget *ptrTree = ui->tree;
   QTreeWidgetItem *itm_ptr;
+  //  date = QDate::currentDate().toString("dd.MM.yyyy");
   date = date_time.toString("dd.MM.yyyy");
   QList<QTreeWidgetItem *> items = ptrTree->findItems(date, Qt::MatchExactly, 1);
 
   if (!items.count()) {
+    //    itm_ptr = addTreeRootDate(ptrTree);
     itm_ptr = addTreeRootDate(ptrTree, date_time);
     InsertItem(itm_ptr, url, site_name, date_time);
   } else
@@ -79,6 +81,8 @@ void HistoryDialog::addUrl(QString url, QString site_name, QDateTime date_time)
 
   ptrTree->sortItems(0, Qt::DescendingOrder);
   HistoryChanged = true;
+  //  ptrTree->sortItems(4, Qt::DescendingOrder);
+  //  ptrTree->sortByColumn(4, Qt::DescendingOrder);
 }
 
 void HistoryDialog::InsertItem(QTreeWidgetItem *parent, QString url, QString site_name, QDateTime date_time)
@@ -95,14 +99,16 @@ void HistoryDialog::InsertItem(QTreeWidgetItem *parent, QString url, QString sit
   //test
   //  int MyURLData = Qt::UserRole + 1;
   //  newItem->setData(2, MyURLData, time);
+  //
   //  newItem->setData(2, MyURLData, QUrl(url));
-  //test
   newItem->setExpanded(true);
 }
 
 void HistoryDialog::SaveSettings()
 {
   settings.beginGroup(this->objectName());
+  //  settings.setValue("geometry", saveGeometry());
+  //  settings.setValue("state", saveState());
   settings.setValue("pos", pos());
   settings.setValue("size", size());
   settings.endGroup();
@@ -113,6 +119,8 @@ void HistoryDialog::LoadSettings()
 {
   if (QFile::exists(qApp->applicationName() + ".ini")) {
     settings.beginGroup(this->objectName());
+    //    restoreGeometry(settings.value("geometry").toByteArray());
+    //    restoreState(settings.value("state", QByteArray()) .toByteArray());
     QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
     QSize size = settings.value("size", QSize(400, 400)).toSize();
     resize(size);
@@ -124,6 +132,13 @@ void HistoryDialog::LoadSettings()
 void HistoryDialog::SaveHistory()
 {
   //    QString directory = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+  //    if (directory.isEmpty())
+  //        directory = QDir::homePath() + QLatin1String("/.") + QCoreApplication::applicationName();
+  //    if (!QFile::exists(directory)) {
+  //        QDir dir;
+  //        dir.mkpath(directory);
+  //    }
+  //    QFile historyFile(directory + QLatin1String("/history"));
   if (!HistoryChanged)
     return;
 
@@ -186,6 +201,7 @@ void HistoryDialog::RemoveItem()
   QList<QTreeWidgetItem *> selected;
   //Проход с помощью итератора
   QTreeWidgetItemIterator it(ui->tree);
+  //  QTreeWidgetItemIterator it(ui->tree->invisibleRootItem());
 
   while (*(++it)) {
     if ((*it)->checkState(1) == Qt::Checked)
@@ -222,5 +238,9 @@ void HistoryDialog::CallSite(QTreeWidgetItem *item, int index)
 }
 void HistoryDialog::SelectItem(QTreeWidgetItem *item, int index)
 {
+  //  if (item->checkState(0) == Qt::Checked)
+  //    item->setSelected(true);
+  //  else
+  //    item->setSelected(false);
 }
 
