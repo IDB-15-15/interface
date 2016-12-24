@@ -43,7 +43,7 @@
      <item>
       <widget class="QToolButton" name="toolButton">
        <property name="text">
-        <string>💩</string>
+        <string>Go</string>
        </property>
       </widget>
      </item>

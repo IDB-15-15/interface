@@ -22,24 +22,44 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QTreeWidget" name="tree">
+     <property name="toolTipDuration">
+      <number>-1</number>
+     </property>
+     <property name="autoExpandDelay">
+      <number>-1</number>
+     </property>
      <property name="expandsOnDoubleClick">
       <bool>false</bool>
      </property>
      <property name="columnCount">
-      <number>4</number>
+      <number>5</number>
      </property>
      <attribute name="headerVisible">
       <bool>true</bool>
      </attribute>
+     <attribute name="headerCascadingSectionResizes">
+      <bool>false</bool>
+     </attribute>
      <attribute name="headerDefaultSectionSize">
       <number>100</number>
+     </attribute>
+     <attribute name="headerHighlightSections">
+      <bool>false</bool>
+     </attribute>
+     <attribute name="headerShowSortIndicator" stdset="0">
+      <bool>false</bool>
      </attribute>
      <attribute name="headerStretchLastSection">
       <bool>true</bool>
      </attribute>
      <column>
       <property name="text">
-       <string notr="true">0</string>
+       <string>.</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string notr="true">&quot;Data&quot;</string>
       </property>
       <property name="textAlignment">
        <set>AlignCenter</set>
@@ -47,7 +67,7 @@
      </column>
      <column>
       <property name="text">
-       <string notr="true"/>
+       <string notr="true">&quot;Time&quot;</string>
       </property>
       <property name="textAlignment">
        <set>AlignCenter</set>
@@ -55,7 +75,7 @@
      </column>
      <column>
       <property name="text">
-       <string notr="true"/>
+       <string>Name</string>
       </property>
       <property name="textAlignment">
        <set>AlignCenter</set>
@@ -63,7 +83,7 @@
      </column>
      <column>
       <property name="text">
-       <string notr="true"/>
+       <string>&quot;Link&quot;</string>
       </property>
       <property name="textAlignment">
        <set>AlignCenter</set>

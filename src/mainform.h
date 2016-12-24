@@ -27,6 +27,7 @@ public:
 private:
     std::unique_ptr<Ui::MainForm> ui;
     HistoryDialog *hd;
+	QWidget* content = nullptr;
 private slots:
 };
 
