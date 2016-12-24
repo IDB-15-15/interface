@@ -18,7 +18,7 @@ class MainForm : public QWidget {
     Q_OBJECT
 
 public:
-    explicit MainForm(QWidget *parent=nullptr, HistoryDialog *hd_=nullptr);
+    explicit MainForm(QWidget *parent, HistoryDialog *hd_);
 
     virtual ~MainForm();
 

@@ -6,7 +6,10 @@
 #include <QString>
 #include <QDebug>
 #include <QSettings>
-#include <QtGui>
+#include <QTabWidget>
+//#include <QtGui>
+#include <memory>
+#include "ui_mainform.h"
 
 namespace Ui
 {
@@ -38,7 +41,7 @@ class HistoryDialog : public QDialog
     Q_OBJECT
 
   public:
-    explicit HistoryDialog(QWidget *parent = 0);
+    explicit HistoryDialog(QWidget *parent);
     ~HistoryDialog();
 
     void addUrl(QString url, QString site_name, QDateTime date_time);
@@ -46,24 +49,32 @@ class HistoryDialog : public QDialog
     // сохранение истории в файле
     void SaveHistory();
     void SaveSettings();
+    void set_pointers(QLineEdit *qle_, QToolButton *qtbb_, QToolButton *qtbf_);
+    void set_tab_pointer(QTabWidget *qtw_)
+    {
+      qtw = qtw_;
+    }
   private:
     Ui::HistoryDialog *ui;
     QSettings settings;
     QString HistoryFileName;
     bool HistoryChanged;
+    bool no_set_pointers;
+    QLineEdit *qle;
+    QToolButton *qtbb;
+    QToolButton *qtbf;
+    QTabWidget *qtw;
 
     QTreeWidgetItem *addTreeRootDate(QTreeWidget *ptrTree, QDateTime date_time);
     void DeleteUrl(QTreeWidgetItem *currentItem);
     void InsertItem(QTreeWidgetItem *parent, QString url, QString site_name, QDateTime date_time);
     void LoadSettings();
-
     //    загрузка истории из файла
     void LoadHistory();
 
   private slots:
     void RemoveItem();
     void RemoveItems();
-    void SelectItem(QTreeWidgetItem *item, int index);
     void CallSite(QTreeWidgetItem *item, int index);
 };
 

@@ -1,18 +1,24 @@
 #include "historydialog.h"
 #include "ui_historydialog.h"
+
 #include <QDate>
 #include <QDateTime>
 #include <QTime>
 #include <QUrl>
 //#include <QVariant>
 #include "messdialog.h"
+#include "mainwindow.h"
+#include "mainform.h"
 
-HistoryDialog::HistoryDialog(QWidget *parent) :
+enum column_no {HIDDEN = 0, CHECKED = 1, DATES = 2, SITE_NAMES = 3, URLS = 4};
+
+HistoryDialog::HistoryDialog(QWidget *parent = nullptr):
   QDialog(parent),
   ui(new Ui::HistoryDialog),
   settings(QCoreApplication::applicationName() + QLatin1String(".ini") , QSettings::IniFormat),
   HistoryFileName(QCoreApplication::applicationName() + QLatin1String(".his")),
-  HistoryChanged(false)
+  HistoryChanged(false), no_set_pointers(false)
+
 {
   ui->setupUi(this);
   //Считать настройки окна
@@ -20,7 +26,7 @@ HistoryDialog::HistoryDialog(QWidget *parent) :
   //  ui->tree->setSortingEnabled(true);
   ui->tree->setAutoFillBackground(true);
   ui->tree->setColumnCount(5);
-  ui->tree->setColumnHidden(0, true);
+  ui->tree->setColumnHidden(HIDDEN, true);
   //Если сделаешь tv->setExpandsOnDoubleClick ( false ), будешь получать сигнал.
   ui->tree->setExpandsOnDoubleClick(false);
   //связываем кнопку RemoveAll с соответствующим слотом
@@ -28,7 +34,11 @@ HistoryDialog::HistoryDialog(QWidget *parent) :
   //связываем кнопку Remove с соответствующим слотом
   connect(ui->btnRemove, SIGNAL(clicked(bool)), this, SLOT(RemoveItem()), Qt::UniqueConnection);
   //Соединение для выбранной записи
-  //    connect(ui->tree, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)), this, SLOT(SelectItem(QTreeWidgetItem *, int)));
+  //  connect(ui->tree, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(SelectItem(QTreeWidgetItem *, int)));
+  connect(ui->tree, &QTreeWidget::itemDoubleClicked, this, &HistoryDialog::CallSite);
+//  connect(ui->tree, &QTreeWidget::itemDoubleClicked, this, &HistoryDialog::CallSite);
+  //  connect(ui->tree, &QTreeWidget::itemDoubleClicked, [this](QTreeWidgetItem *item, int index){});
+  //  Browser::MainForm(parent).omniBox->text()="" ;
   //test
   //  addUrl("http://lenta.ru", "Наименование сайта", QDateTime(QDate(2016, 12, 20), QTime::currentTime()));
   //  addUrl("http://vz.ru", "Наименование сайта", QDateTime(QDate(2016, 12, 20), QTime::currentTime()));
@@ -57,8 +67,8 @@ QTreeWidgetItem *HistoryDialog::addTreeRootDate(QTreeWidget *ptrTree, QDateTime 
 {
   QTreeWidgetItem *ptrItem;
   ptrItem = new QTreeWidgetItem(ptrTree);
-  ptrItem->setText(0, date_time.toString("yyyy.MM.dd hh:mm:ss"));
-  ptrItem->setText(1, date_time.toString("dd.MM.yyyy"));
+  ptrItem->setText(HIDDEN, date_time.toString("yyyy.MM.dd hh:mm:ss"));
+  ptrItem->setText(CHECKED, date_time.toString("dd.MM.yyyy"));
   ptrItem->setExpanded(true);
   return ptrItem;
 }
@@ -77,7 +87,7 @@ void HistoryDialog::addUrl(QString url, QString site_name, QDateTime date_time)
   } else
     InsertItem(items.first(), url, site_name, date_time);
 
-  ptrTree->sortItems(0, Qt::DescendingOrder);
+  ptrTree->sortItems(HIDDEN, Qt::DescendingOrder);
   HistoryChanged = true;
 }
 
@@ -87,15 +97,15 @@ void HistoryDialog::InsertItem(QTreeWidgetItem *parent, QString url, QString sit
 
   QTreeWidgetItem *newItem = new QTreeWidgetItem(parent);
   //Устанавливаем состояние check
-  newItem->setText(0, date_time.toString("yyyy.MM.dd hh:mm:ss"));
-  newItem->setCheckState(1, Qt::Unchecked);
-  newItem->setText(2, date_time.toString("hh:mm"));
-  newItem->setText(3, site_name);
-  newItem->setText(4, url);
+  newItem->setText(HIDDEN, date_time.toString("yyyy.MM.dd hh:mm:ss"));
+  newItem->setCheckState(CHECKED, Qt::Unchecked);
+  newItem->setText(DATES, date_time.toString("hh:mm"));
+  newItem->setText(SITE_NAMES, site_name);
+  newItem->setText(URLS, url);
   //test
   //  int MyURLData = Qt::UserRole + 1;
-  //  newItem->setData(2, MyURLData, time);
-  //  newItem->setData(2, MyURLData, QUrl(url));
+  //  newItem->setData(URLS, MyURLData, time);
+  //  newItem->setData(URLS, MyURLData, QUrl(url));
   //test
   newItem->setExpanded(true);
 }
@@ -109,6 +119,16 @@ void HistoryDialog::SaveSettings()
   settings.sync();
 }
 
+void HistoryDialog::set_pointers(QLineEdit *qle_, QToolButton *qtbb_, QToolButton *qtbf_)
+{
+  if (!no_set_pointers) {
+    qle = qle_;
+    qtbb = qtbb_;
+    qtbf = qtbf_;
+    no_set_pointers = true;
+  }
+}
+
 void HistoryDialog::LoadSettings()
 {
   if (QFile::exists(qApp->applicationName() + ".ini")) {
@@ -120,6 +140,7 @@ void HistoryDialog::LoadSettings()
     settings.endGroup();
   }
 }
+
 
 void HistoryDialog::SaveHistory()
 {
@@ -140,14 +161,13 @@ void HistoryDialog::SaveHistory()
 
   while (*(++it)) {
     if ((*it)->parent() != nullptr)
-      out << (*it)->text(0) << "\n" << (*it)->text(3) << "\n" << (*it)->text(4) << "\n";
+      out << (*it)->text(HIDDEN) << "\n" << (*it)->text(SITE_NAMES) << "\n" << (*it)->text(URLS) << "\n";
   };
 
   historyFile.close();
 
   HistoryChanged = false;
 }
-
 void HistoryDialog::LoadHistory()
 {
   QDateTime date_time;
@@ -179,7 +199,6 @@ void HistoryDialog::LoadHistory()
 
   historyFile.close();
 }
-
 void HistoryDialog::RemoveItem()
 {
   int index;
@@ -188,7 +207,7 @@ void HistoryDialog::RemoveItem()
   QTreeWidgetItemIterator it(ui->tree);
 
   while (*(++it)) {
-    if ((*it)->checkState(1) == Qt::Checked)
+    if ((*it)->checkState(CHECKED) == Qt::Checked)
       selected.append((*it));
   };
 
@@ -207,7 +226,6 @@ void HistoryDialog::RemoveItem()
       ui->tree->takeTopLevelItem(i);
   }
 }
-
 void HistoryDialog::RemoveItems()
 {
   if (YNMess("Удалить все записи ?")) {
@@ -215,12 +233,17 @@ void HistoryDialog::RemoveItems()
     HistoryChanged = true;
   }
 }
-
 void HistoryDialog::CallSite(QTreeWidgetItem *item, int index)
 {
-  //    m_ui->textBrowser->setSource(item->data(0, MyURLData ).toUrl());
-}
-void HistoryDialog::SelectItem(QTreeWidgetItem *item, int index)
-{
+  if (item != nullptr && item->parent() != nullptr) {
+    QString url = item->text(URLS);
+    qle->setText(url);
+    emit qle->returnPressed();
+    if(qtw!=nullptr)
+    emit qtw->setCurrentIndex(0);
+    else
+        qDebug()<<"Tabwidget is absent";
+    emit this->close();
+  }
 }
 

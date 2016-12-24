@@ -11,40 +11,41 @@ namespace Browser
   MainWindow::MainWindow(QWidget *parent) :
     QMainWindow {parent},
     ui {new Ui::MainWindow},
-  settings(qApp->applicationName() + ".ini" , QSettings::IniFormat),
-  hd(new HistoryDialog(this))
+  //  settings(qApp->applicationName() + ".ini" , QSettings::IniFormat),
+  settings(QCoreApplication::applicationName() + QLatin1String(".ini") , QSettings::IniFormat)
+  ,hd(new HistoryDialog(this))
   {
     ui->setupUi(this);
     //Считать настройки окна
     LoadSettings();
-    connect(ui->pushButton, &QPushButton::clicked,
-    [this] {
-      ui->tabWidget->addTab(new MainForm(this, hd), QString {});
-    });
+    connect(ui->pushButton, &QPushButton::clicked, [this] {ui->tabWidget->addTab(new MainForm(this, hd), QString {}); });
     connect(ui->tabWidget, &QTabWidget::tabCloseRequested, [this](int tab) {
       ui->tabWidget->removeTab(tab);
     });
     //соединение для вызова окна истории
-//    connect(ui->btnHistory, &QPushButton::clicked, hd, &HistoryDialog::show, Qt::UniqueConnection);
-     connect(ui->btnHistory, &QPushButton::clicked, [this]() {hd->show();});
-
+    //    connect(ui->btnHistory, &QPushButton::clicked, hd, &HistoryDialog::show, Qt::UniqueConnection);
+    connect(ui->btnHistory, &QPushButton::clicked, [this]() {
+      hd->show();
+    });  
     //
     emit ui->pushButton->clicked();
+    //инициализировать указатель на первый TabWidget(только после посылки сигнала)
+    hd->set_tab_pointer(ui->tabWidget);
   }
 
   void MainWindow::closeEvent(QCloseEvent *event)
   {
-      SaveSettings();
-      hd->SaveSettings();
-      hd->SaveHistory();
-      event->accept();
+    SaveSettings();
+    hd->SaveSettings();
+    hd->SaveHistory();
+    event->accept();
   }
 
   void MainWindow::SaveSettings()
   {
-      settings.beginGroup(this->objectName());
-      //    settings.setValue("geometry", saveGeometry());
-      settings.setValue("pos", pos());
+    settings.beginGroup(this->objectName());
+    //    settings.setValue("geometry", saveGeometry());
+    settings.setValue("pos", pos());
     settings.setValue("size", size());
     settings.setValue("state", saveState());
     settings.endGroup();
@@ -56,7 +57,7 @@ namespace Browser
     //      qDebug() << "FILE" << fileName << " DOESN'T EXIST" << endl;
     if (QFile::exists(qApp->applicationName() + ".ini")) {
       settings.beginGroup(this->objectName());
-//      restoreGeometry(settings.value("geometry").toByteArray());
+      //      restoreGeometry(settings.value("geometry").toByteArray());
       QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
       QSize size = settings.value("size", QSize(400, 400)).toSize();
       resize(size);
