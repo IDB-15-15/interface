@@ -28,11 +28,7 @@ namespace Browser
       virtual ~MainWindow();
 
     private:
-      void closeEvent(QCloseEvent *event)
-      {
-        SaveSettings();
-        event->accept();
-      }
+      void closeEvent(QCloseEvent *event);
       void SaveSettings();
       void LoadSettings();
     private:

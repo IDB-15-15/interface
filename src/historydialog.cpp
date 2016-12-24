@@ -36,7 +36,6 @@ HistoryDialog::HistoryDialog(QWidget *parent = nullptr):
   //Соединение для выбранной записи
   //  connect(ui->tree, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(SelectItem(QTreeWidgetItem *, int)));
   connect(ui->tree, &QTreeWidget::itemDoubleClicked, this, &HistoryDialog::CallSite);
-//  connect(ui->tree, &QTreeWidget::itemDoubleClicked, this, &HistoryDialog::CallSite);
   //  connect(ui->tree, &QTreeWidget::itemDoubleClicked, [this](QTreeWidgetItem *item, int index){});
   //  Browser::MainForm(parent).omniBox->text()="" ;
   //test
@@ -239,10 +238,12 @@ void HistoryDialog::CallSite(QTreeWidgetItem *item, int index)
     QString url = item->text(URLS);
     qle->setText(url);
     emit qle->returnPressed();
-    if(qtw!=nullptr)
-    emit qtw->setCurrentIndex(0);
+
+    if (qtw != nullptr)
+      emit qtw->setCurrentIndex(0);
     else
-        qDebug()<<"Tabwidget is absent";
+      qDebug() << "Tabwidget is absent";
+
     emit this->close();
   }
 }
