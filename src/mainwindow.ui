@@ -53,6 +53,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="abcBook">
+        <property name="text">
+         <string>Bookmark</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="pushButton">
         <property name="layoutDirection">
          <enum>Qt::LeftToRight</enum>
@@ -72,7 +79,7 @@
      <x>0</x>
      <y>0</y>
      <width>436</width>
-     <height>18</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

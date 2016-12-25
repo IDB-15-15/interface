@@ -41,6 +41,16 @@
       <widget class="QLineEdit" name="omniBox"/>
      </item>
      <item>
+      <widget class="QPushButton" name="pushMark">
+       <property name="focusPolicy">
+        <enum>Qt::StrongFocus</enum>
+       </property>
+       <property name="text">
+        <string>+</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QToolButton" name="toolButton">
        <property name="text">
         <string>Go</string>

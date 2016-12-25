@@ -19,7 +19,8 @@ SOURCES += src/main.cpp \
     src/tabbar.cpp \
     src/tabwidget.cpp \
     src/historydialog.cpp \
-    src/messdialog.cpp
+    src/messdialog.cpp \
+    src/bookmark.cpp
 
 HEADERS  += \
     src/mainwindow.h \
@@ -27,9 +28,11 @@ HEADERS  += \
     src/tabbar.h \
     src/tabwidget.h \
     src/historydialog.h \
-    src/messdialog.h
+    src/messdialog.h \
+    src/bookmark.h
 
 FORMS    += \
     src/mainwindow.ui \
     src/mainform.ui \
-    src/historydialog.ui
+    src/historydialog.ui \
+    src/bookmark.ui

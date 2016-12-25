@@ -5,6 +5,7 @@
 
 #include <memory>
 #include "historydialog.h"
+#include "bookmark.h"
 //#include "mainwindow.h"
 
 
@@ -18,15 +19,18 @@ class MainForm : public QWidget {
     Q_OBJECT
 
 public:
-    explicit MainForm(QWidget *parent, HistoryDialog *hd_);
+	explicit MainForm(QWidget *parent, HistoryDialog *hd_, Bookmark *bm_);
 
     virtual ~MainForm();
 
     void go();
 
+	void Mark();
+
 private:
     std::unique_ptr<Ui::MainForm> ui;
     HistoryDialog *hd;
+	Bookmark *bm;
 	QWidget* content = nullptr;
 private slots:
 };

@@ -14,17 +14,20 @@ namespace Browser
   //  settings(qApp->applicationName() + ".ini" , QSettings::IniFormat),
   settings(QCoreApplication::applicationName() + QLatin1String(".ini") , QSettings::IniFormat)
   ,hd(new HistoryDialog(this))
+  ,bm(new Bookmark(this))
   {
     ui->setupUi(this);
     //Считать настройки окна
     LoadSettings();
     connect(ui->pushButton, &QPushButton::clicked, [this]
-    {ui->tabWidget->addTab(new MainForm(this, hd), QString {});if(ui->tabWidget->count()>1) ui->tabWidget->setTabsClosable(true); });
-    connect(ui->tabWidget, &QTabWidget::tabCloseRequested, [this](int tab) {ui->tabWidget->removeTab(tab);
+	{ui->tabWidget->addTab(new MainForm(this, hd, bm), QString {});if(ui->tabWidget->count()>1) ui->tabWidget->setTabsClosable(true); });
+	connect(ui->tabWidget, &QTabWidget::tabCloseRequested, [this](int tab) {ui->tabWidget->removeTab(tab);
     if(ui->tabWidget->count()<2) ui->tabWidget->setTabsClosable(false);});
     //соединение для вызова окна истории
     //    connect(ui->btnHistory, &QPushButton::clicked, hd, &HistoryDialog::show, Qt::UniqueConnection);
-    connect(ui->btnHistory, &QPushButton::clicked, [this]() {hd->set_pointers(); hd->show();});
+	connect(ui->btnHistory, &QPushButton::clicked, [this]() {hd->set_pointers(); hd->show();});
+	connect(ui->abcBook, &QPushButton::clicked, [this]() { bm->show();});
+
     //
     emit ui->pushButton->clicked();
     //инициализировать указатель на TabWidget(только после посылки сигнала)
@@ -33,10 +36,13 @@ namespace Browser
 
   void MainWindow::closeEvent(QCloseEvent *event)
   {
-    SaveSettings();
+	SaveSettings();
     hd->SaveSettings();
     hd->SaveHistory();
+	bm->SaveBookmark();
+
     event->accept();
+
   }
 
   void MainWindow::SaveSettings()

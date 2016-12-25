@@ -82,10 +82,10 @@ void HistoryDialog::addUrl(QString url, QString site_name, QDateTime date_time)
   QList<QTreeWidgetItem *> items = ptrTree->findItems(date, Qt::MatchExactly, 1);
 
   if (!items.count()) {
-    itm_ptr = addTreeRootDate(ptrTree, date_time);
-    InsertItem(itm_ptr, url, site_name, date_time);
+	itm_ptr = addTreeRootDate(ptrTree, date_time);
+	InsertItem(itm_ptr, url, site_name, date_time);
   } else
-    InsertItem(items.first(), url, site_name, date_time);
+	InsertItem(items.first(), url, site_name, date_time);
 
   ptrTree->sortItems(HIDDEN, Qt::DescendingOrder);
   HistoryChanged = true;
@@ -128,47 +128,47 @@ void HistoryDialog::set_pointers()
   qo_que.push(this->parent());
 
   while (!qo_que.empty()) {
-    qo_ptr = qo_que.front();
-    qo_que.pop();
+	qo_ptr = qo_que.front();
+	qo_que.pop();
 
-    //Поиск по имени и инициализация указателя, если найдено
-    if (qo_ptr->objectName().toLower() == "tabwidget") {
-      qDebug() << qo_ptr->objectName();
-      qw = dynamic_cast<QTabWidget *>(qo_ptr)->currentWidget();
-      break;
-    }
+	//Поиск по имени и инициализация указателя, если найдено
+	if (qo_ptr->objectName().toLower() == "tabwidget") {
+	  qDebug() << qo_ptr->objectName();
+	  qw = dynamic_cast<QTabWidget *>(qo_ptr)->currentWidget();
+	  break;
+	}
 
-    for (const auto &it : qo_ptr->children()) {
-      qo_que.push(it);
-    }
+	for (const auto &it : qo_ptr->children()) {
+	  qo_que.push(it);
+	}
   }
 
   //Очистить очередь
   while (!qo_que.empty()) {
-    qo_que.pop();
+	qo_que.pop();
   }
 
   //Обход дерева в ширину в текущей странице Tab
   qo_que.push(qw);
 
   while (!qo_que.empty()) {
-    qo_ptr = qo_que.front();
-    qo_que.pop();
+	qo_ptr = qo_que.front();
+	qo_que.pop();
 
-    //Поиск по имени и инициализация указателей, если найдено
-    if (qo_ptr->objectName().toLower() == "omnibox")
-      //      qDebug() << qo_ptr->objectName();
-      qle = dynamic_cast<QLineEdit *>(qo_ptr);
-    else if (qo_ptr->objectName().toLower() == "toolbuttonback")
-      //      qDebug() << qo_ptr->objectName();
-      qtbb = dynamic_cast<QToolButton *>(qo_ptr);
-    else if (qo_ptr->objectName().toLower() == "toolbuttonforward")
-      //      qDebug() << qo_ptr->objectName();
-      qtbf = dynamic_cast<QToolButton *>(qo_ptr);
+	//Поиск по имени и инициализация указателей, если найдено
+	if (qo_ptr->objectName().toLower() == "omnibox")
+	  //      qDebug() << qo_ptr->objectName();
+	  qle = dynamic_cast<QLineEdit *>(qo_ptr);
+	else if (qo_ptr->objectName().toLower() == "toolbuttonback")
+	  //      qDebug() << qo_ptr->objectName();
+	  qtbb = dynamic_cast<QToolButton *>(qo_ptr);
+	else if (qo_ptr->objectName().toLower() == "toolbuttonforward")
+	  //      qDebug() << qo_ptr->objectName();
+	  qtbf = dynamic_cast<QToolButton *>(qo_ptr);
 
-    for (const auto &it : qo_ptr->children()) {
-      qo_que.push(it);
-    }
+	for (const auto &it : qo_ptr->children()) {
+	  qo_que.push(it);
+	}
   }
 
 //  if (qle != nullptr)
@@ -183,12 +183,12 @@ void HistoryDialog::set_pointers()
 void HistoryDialog::LoadSettings()
 {
   if (QFile::exists(qApp->applicationName() + ".ini")) {
-    settings.beginGroup(this->objectName());
-    QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
-    QSize size = settings.value("size", QSize(400, 400)).toSize();
-    resize(size);
-    move(pos);
-    settings.endGroup();
+	settings.beginGroup(this->objectName());
+	QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
+	QSize size = settings.value("size", QSize(400, 400)).toSize();
+	resize(size);
+	move(pos);
+	settings.endGroup();
   }
 }
 
@@ -197,13 +197,13 @@ void HistoryDialog::SaveHistory()
 {
   //    QString directory = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
   if (!HistoryChanged)
-    return;
+	return;
 
   QFile historyFile(HistoryFileName);
 
   if (!historyFile.open(QFile::WriteOnly | QFile::Truncate)) {
-    qWarning() << "Unable to open history file" << historyFile.fileName();
-    return;
+	qWarning() << "Unable to open history file" << historyFile.fileName();
+	return;
   }
 
   QTextStream out(&historyFile);
@@ -211,8 +211,8 @@ void HistoryDialog::SaveHistory()
   QTreeWidgetItemIterator it(ui->tree);
 
   while (*(++it)) {
-    if ((*it)->parent() != nullptr)
-      out << (*it)->text(HIDDEN) << "\n" << (*it)->text(SITE_NAMES) << "\n" << (*it)->text(URLS) << "\n";
+	if ((*it)->parent() != nullptr)
+	  out << (*it)->text(HIDDEN) << "\n" << (*it)->text(SITE_NAMES) << "\n" << (*it)->text(URLS) << "\n";
   };
 
   historyFile.close();
@@ -226,26 +226,26 @@ void HistoryDialog::LoadHistory()
   QFile historyFile(HistoryFileName);
 
   if (!historyFile.exists())
-    return;
+	return;
 
   if (!historyFile.open(QFile::ReadOnly)) {
-    qWarning() << "Unable to open history file" << historyFile.fileName();
-    return;
+	qWarning() << "Unable to open history file" << historyFile.fileName();
+	return;
   }
 
   QTextStream in(&historyFile);
 
   while (!in.atEnd()) {
-    line = in.readLine();
-    date_time = QDateTime::fromString(line, "yyyy.MM.dd hh:mm:ss");
+	line = in.readLine();
+	date_time = QDateTime::fromString(line, "yyyy.MM.dd hh:mm:ss");
 
-    if (!date_time.isValid()) continue;
+	if (!date_time.isValid()) continue;
 
-    line = in.readLine();
-    site_name = line;
-    line = in.readLine();
-    url = line;
-    addUrl(url, site_name, date_time);
+	line = in.readLine();
+	site_name = line;
+	line = in.readLine();
+	url = line;
+	addUrl(url, site_name, date_time);
   }
 
   historyFile.close();
@@ -258,43 +258,43 @@ void HistoryDialog::RemoveItem()
   QTreeWidgetItemIterator it(ui->tree);
 
   while (*(++it)) {
-    if ((*it)->checkState(CHECKED) == Qt::Checked)
-      selected.append((*it));
+	if ((*it)->checkState(CHECKED) == Qt::Checked)
+	  selected.append((*it));
   };
 
   foreach (QTreeWidgetItem *item, selected) {
-    delete item;
-    HistoryChanged = true;
+	delete item;
+	HistoryChanged = true;
   }
 
   int cnt = ui->tree->topLevelItemCount();
   QTreeWidgetItem *iptr;
 
   for (int i = 0; i < cnt; ++i) {
-    iptr = ui->tree->topLevelItem(i);
+	iptr = ui->tree->topLevelItem(i);
 
-    if (iptr != nullptr && iptr->childCount() == 0)
-      ui->tree->takeTopLevelItem(i);
+	if (iptr != nullptr && iptr->childCount() == 0)
+	  ui->tree->takeTopLevelItem(i);
   }
 }
 void HistoryDialog::RemoveItems()
 {
   if (YNMess("Удалить все записи ?")) {
-    ui->tree->clear();
-    HistoryChanged = true;
+	ui->tree->clear();
+	HistoryChanged = true;
   }
 }
 void HistoryDialog::CallSite(QTreeWidgetItem *item, int index)
 {
   if (item != nullptr && item->parent() != nullptr) {
-    QString url = item->text(URLS);
-    qle->setText(url);
-    emit qle->returnPressed();
-    //    if (qtw != nullptr)
-    //      emit qtw->setCurrentIndex(0);
-    //    else
-    //      qDebug() << "Tabwidget is absent";
-    emit this->close();
+	QString url = item->text(URLS);
+	qle->setText(url);
+	emit qle->returnPressed();
+	//    if (qtw != nullptr)
+	//      emit qtw->setCurrentIndex(0);
+	//    else
+	//      qDebug() << "Tabwidget is absent";
+	emit this->close();
   }
 }
 

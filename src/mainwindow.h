@@ -10,6 +10,7 @@
 
 #include <memory>
 #include "historydialog.h"
+#include "bookmark.h"
 
 namespace Browser
 {
@@ -29,12 +30,14 @@ namespace Browser
 
     private:
       void closeEvent(QCloseEvent *event);
+	  void closeEvent2(QCloseEvent *ev);
       void SaveSettings();
       void LoadSettings();
     private:
       std::unique_ptr<Ui::MainWindow> ui;
       QSettings settings;
-      HistoryDialog *hd;
+	  HistoryDialog *hd;
+	  Bookmark *bm;
     private slots:
   };
 
