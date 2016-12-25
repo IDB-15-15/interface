@@ -50,29 +50,12 @@ class HistoryDialog : public QDialog
     void SaveHistory();
     void SaveSettings();
     void set_pointers();
-//    void set_pointers(QLineEdit *qle_, QToolButton *qtbb_, QToolButton *qtbf_)
-//    {
-//        //  if (!no_set_pointers) {
-//        qle = qle_;
-//        qtbb = qtbb_;
-//        qtbf = qtbf_;
-//        //    no_set_pointers = true;
-//        //  }
-//    }
-//    void set_tab_pointer(QTabWidget *qtw_)
-//    {
-//      qtw = qtw_;
-//    }
-//    void set_curr_tabwidget_index(int index)
-//    {
-//        curr_tabwidget_index = index;
-//    }
   private:
     Ui::HistoryDialog *ui;
     QSettings settings;
     QString HistoryFileName;
     bool HistoryChanged;
-    bool no_set_pointers;
+//    bool no_set_pointers;
     QLineEdit *qle;
     QToolButton *qtbb;
     QToolButton *qtbf;

@@ -33,6 +33,7 @@ private:
 	Bookmark *bm;
 	QWidget* content = nullptr;
 private slots:
+    void SiteRequest(QString url);
 };
 
 

@@ -3,7 +3,6 @@
 
 #include "mainform.h"
 #include "tabbar.h"
-//#include "historydialog.h"
 
 namespace Browser
 {
@@ -13,36 +12,36 @@ namespace Browser
     ui {new Ui::MainWindow},
   //  settings(qApp->applicationName() + ".ini" , QSettings::IniFormat),
   settings(QCoreApplication::applicationName() + QLatin1String(".ini") , QSettings::IniFormat)
-  ,hd(new HistoryDialog(this))
-  ,bm(new Bookmark(this))
+  , hd(new HistoryDialog(this))
+  , bm(new Bookmark(this))
   {
     ui->setupUi(this);
     //Считать настройки окна
     LoadSettings();
     connect(ui->pushButton, &QPushButton::clicked, [this]
-	{ui->tabWidget->addTab(new MainForm(this, hd, bm), QString {});if(ui->tabWidget->count()>1) ui->tabWidget->setTabsClosable(true); });
-	connect(ui->tabWidget, &QTabWidget::tabCloseRequested, [this](int tab) {ui->tabWidget->removeTab(tab);
-    if(ui->tabWidget->count()<2) ui->tabWidget->setTabsClosable(false);});
+    {ui->tabWidget->addTab(new MainForm(this, hd, bm), QString {});
+    if (ui->tabWidget->count() > 1) ui->tabWidget->setTabsClosable(true); });
+    connect(ui->tabWidget, &QTabWidget::tabCloseRequested, [this](int tab) {
+      ui->tabWidget->removeTab(tab);
+
+      if (ui->tabWidget->count() < 2) ui->tabWidget->setTabsClosable(false);
+    });
     //соединение для вызова окна истории
     //    connect(ui->btnHistory, &QPushButton::clicked, hd, &HistoryDialog::show, Qt::UniqueConnection);
-	connect(ui->btnHistory, &QPushButton::clicked, [this]() {hd->set_pointers(); hd->show();});
-	connect(ui->abcBook, &QPushButton::clicked, [this]() { bm->show();});
-
+    //Инициализация указателей для связи с виджетами MainWindow
+    connect(ui->btnHistory, &QPushButton::clicked, [this]() {hd->set_pointers(); hd->show();});
+    connect(ui->abcBook, &QPushButton::clicked, [this]() {bm->set_pointers2();bm->show();});
     //
     emit ui->pushButton->clicked();
-    //инициализировать указатель на TabWidget(только после посылки сигнала)
-//    hd->set_tab_pointer(ui->tabWidget);
   }
 
   void MainWindow::closeEvent(QCloseEvent *event)
   {
-	SaveSettings();
+    SaveSettings();
     hd->SaveSettings();
     hd->SaveHistory();
-	bm->SaveBookmark();
-
+    bm->SaveBookmark();
     event->accept();
-
   }
 
   void MainWindow::SaveSettings()

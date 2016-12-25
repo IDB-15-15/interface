@@ -21,6 +21,8 @@ Bookmark::Bookmark(QWidget *parent = nullptr):
 
 {
   ui->setupUi(this);
+  //Если сделаешь ui->tree->setExpandsOnDoubleClick ( false ), будешь получать сигнал.
+  ui->free->setExpandsOnDoubleClick(false);
 
   LoadSettings();
 
@@ -90,6 +92,59 @@ void Bookmark::SaveSettings2()
   settings2.sync();
 }
 
+void Bookmark::set_pointers2()
+{
+    std::queue<QObject *> qo_que;
+    QWidget *qw;
+    QObject *qo_ptr;
+    //Обход дерева в ширину в MainWindow
+    qo_que.push(this->parent());
+
+    while (!qo_que.empty()) {
+      qo_ptr = qo_que.front();
+      qo_que.pop();
+
+      //Поиск по имени и инициализация указателя, если найдено
+      if (qo_ptr->objectName().toLower() == "tabwidget") {
+//        qDebug() << qo_ptr->objectName();
+        qw = dynamic_cast<QTabWidget *>(qo_ptr)->currentWidget();
+        break;
+      }
+
+      for (const auto &it : qo_ptr->children()) {
+        qo_que.push(it);
+      }
+    }
+
+    //Очистить очередь
+    while (!qo_que.empty()) {
+      qo_que.pop();
+    }
+
+    //Обход дерева в ширину в текущей странице Tab
+    qo_que.push(qw);
+
+    while (!qo_que.empty()) {
+      qo_ptr = qo_que.front();
+      qo_que.pop();
+
+      //Поиск по имени и инициализация указателей, если найдено
+      if (qo_ptr->objectName().toLower() == "omnibox")
+        //      qDebug() << qo_ptr->objectName();
+        qle = dynamic_cast<QLineEdit *>(qo_ptr);
+      else if (qo_ptr->objectName().toLower() == "toolbuttonback")
+        //      qDebug() << qo_ptr->objectName();
+        qtbb = dynamic_cast<QToolButton *>(qo_ptr);
+      else if (qo_ptr->objectName().toLower() == "toolbuttonforward")
+        //      qDebug() << qo_ptr->objectName();
+        qtbf = dynamic_cast<QToolButton *>(qo_ptr);
+
+      for (const auto &it : qo_ptr->children()) {
+        qo_que.push(it);
+      }
+    }
+}
+
 void Bookmark::LoadSettings()
 {
   if (QFile::exists(qApp->applicationName() + ".ini")) {
@@ -117,7 +172,7 @@ void Bookmark::SaveBookmark()
   }
 
   QTextStream out(&BookmarkFile);
-  //Проход с помощью итератора
+  //РџСЂРѕС…РѕРґ СЃ РїРѕРјРѕС‰СЊСЋ РёС‚РµСЂР°С‚РѕСЂР°
   QTreeWidgetItemIterator it(ui->free);
 
   while (*(++it)) {
@@ -160,7 +215,7 @@ void Bookmark::RemoveItem()
 {
   int index;
   QList<QTreeWidgetItem *> selected;
-  //Проход с помощью итератора
+  //РџСЂРѕС…РѕРґ СЃ РїРѕРјРѕС‰СЊСЋ РёС‚РµСЂР°С‚РѕСЂР°
   QTreeWidgetItemIterator it(ui->free);
   while (*(++it)) {
 	if ((*it)->checkState(CHECKED) == Qt::Checked)

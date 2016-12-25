@@ -51,7 +51,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="toolButton">
+      <widget class="QToolButton" name="toolButtonGo">
        <property name="text">
         <string>Go</string>
        </property>
