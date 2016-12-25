@@ -20,9 +20,11 @@ namespace Browser
     QRegExp rx(regexp);
     QValidator *validator = new QRegExpValidator(rx, this);
     ui->omniBox->setValidator(validator);
-    //Инициализируем указатели на строку URL и кнопки продвижения по истории посещения сайтов
-    hd->set_pointers(ui->omniBox,ui->toolButtonBack,ui->toolButtonForward);
+    //
     connect(ui->omniBox, &QLineEdit::returnPressed, this, &MainForm::go);
+    //Соединение кнопок продвижения по истории посещения сайтов  с формой просмотра истории
+//    connect(ui->toolButtonBack,SIGNAL(clicked(bool),hd,SLOT());
+
   }
 
   MainForm::~MainForm() = default;

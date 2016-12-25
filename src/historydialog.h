@@ -49,11 +49,24 @@ class HistoryDialog : public QDialog
     // сохранение истории в файле
     void SaveHistory();
     void SaveSettings();
-    void set_pointers(QLineEdit *qle_, QToolButton *qtbb_, QToolButton *qtbf_);
-    void set_tab_pointer(QTabWidget *qtw_)
-    {
-      qtw = qtw_;
-    }
+    void set_pointers();
+//    void set_pointers(QLineEdit *qle_, QToolButton *qtbb_, QToolButton *qtbf_)
+//    {
+//        //  if (!no_set_pointers) {
+//        qle = qle_;
+//        qtbb = qtbb_;
+//        qtbf = qtbf_;
+//        //    no_set_pointers = true;
+//        //  }
+//    }
+//    void set_tab_pointer(QTabWidget *qtw_)
+//    {
+//      qtw = qtw_;
+//    }
+//    void set_curr_tabwidget_index(int index)
+//    {
+//        curr_tabwidget_index = index;
+//    }
   private:
     Ui::HistoryDialog *ui;
     QSettings settings;
@@ -63,7 +76,9 @@ class HistoryDialog : public QDialog
     QLineEdit *qle;
     QToolButton *qtbb;
     QToolButton *qtbf;
-    QTabWidget *qtw;
+//    QTabWidget *qtw;
+    QTreeWidgetItem* current_item;
+//    int curr_tabwidget_index;
 
     QTreeWidgetItem *addTreeRootDate(QTreeWidget *ptrTree, QDateTime date_time);
     void DeleteUrl(QTreeWidgetItem *currentItem);
@@ -76,6 +91,7 @@ class HistoryDialog : public QDialog
     void RemoveItem();
     void RemoveItems();
     void CallSite(QTreeWidgetItem *item, int index);
+    void HistoryDown(){}
 };
 
 #endif // HISTORYDIALOG_H

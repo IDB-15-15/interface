@@ -18,19 +18,17 @@ namespace Browser
     ui->setupUi(this);
     //Считать настройки окна
     LoadSettings();
-    connect(ui->pushButton, &QPushButton::clicked, [this] {ui->tabWidget->addTab(new MainForm(this, hd), QString {}); });
-    connect(ui->tabWidget, &QTabWidget::tabCloseRequested, [this](int tab) {
-      ui->tabWidget->removeTab(tab);
-    });
+    connect(ui->pushButton, &QPushButton::clicked, [this]
+    {ui->tabWidget->addTab(new MainForm(this, hd), QString {});if(ui->tabWidget->count()>1) ui->tabWidget->setTabsClosable(true); });
+    connect(ui->tabWidget, &QTabWidget::tabCloseRequested, [this](int tab) {ui->tabWidget->removeTab(tab);
+    if(ui->tabWidget->count()<2) ui->tabWidget->setTabsClosable(false);});
     //соединение для вызова окна истории
     //    connect(ui->btnHistory, &QPushButton::clicked, hd, &HistoryDialog::show, Qt::UniqueConnection);
-    connect(ui->btnHistory, &QPushButton::clicked, [this]() {
-      hd->show();
-    });  
+    connect(ui->btnHistory, &QPushButton::clicked, [this]() {hd->set_pointers(); hd->show();});
     //
     emit ui->pushButton->clicked();
-    //инициализировать указатель на первый TabWidget(только после посылки сигнала)
-    hd->set_tab_pointer(ui->tabWidget);
+    //инициализировать указатель на TabWidget(только после посылки сигнала)
+//    hd->set_tab_pointer(ui->tabWidget);
   }
 
   void MainWindow::closeEvent(QCloseEvent *event)

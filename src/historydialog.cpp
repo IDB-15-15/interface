@@ -9,6 +9,7 @@
 #include "messdialog.h"
 #include "mainwindow.h"
 #include "mainform.h"
+#include "queue"
 
 enum column_no {HIDDEN = 0, CHECKED = 1, DATES = 2, SITE_NAMES = 3, URLS = 4};
 
@@ -118,15 +119,66 @@ void HistoryDialog::SaveSettings()
   settings.sync();
 }
 
-void HistoryDialog::set_pointers(QLineEdit *qle_, QToolButton *qtbb_, QToolButton *qtbf_)
+void HistoryDialog::set_pointers()
 {
-  if (!no_set_pointers) {
-    qle = qle_;
-    qtbb = qtbb_;
-    qtbf = qtbf_;
-    no_set_pointers = true;
+  std::queue<QObject *> qo_que;
+  QWidget *qw;
+  QObject *qo_ptr;
+  //Обход дерева в ширину в MainWindow
+  qo_que.push(this->parent());
+
+  while (!qo_que.empty()) {
+    qo_ptr = qo_que.front();
+    qo_que.pop();
+
+    //Поиск по имени и инициализация указателя, если найдено
+    if (qo_ptr->objectName().toLower() == "tabwidget") {
+      qDebug() << qo_ptr->objectName();
+      qw = dynamic_cast<QTabWidget *>(qo_ptr)->currentWidget();
+      break;
+    }
+
+    for (const auto &it : qo_ptr->children()) {
+      qo_que.push(it);
+    }
   }
+
+  //Очистить очередь
+  while (!qo_que.empty()) {
+    qo_que.pop();
+  }
+
+  //Обход дерева в ширину в текущей странице Tab
+  qo_que.push(qw);
+
+  while (!qo_que.empty()) {
+    qo_ptr = qo_que.front();
+    qo_que.pop();
+
+    //Поиск по имени и инициализация указателей, если найдено
+    if (qo_ptr->objectName().toLower() == "omnibox")
+      //      qDebug() << qo_ptr->objectName();
+      qle = dynamic_cast<QLineEdit *>(qo_ptr);
+    else if (qo_ptr->objectName().toLower() == "toolbuttonback")
+      //      qDebug() << qo_ptr->objectName();
+      qtbb = dynamic_cast<QToolButton *>(qo_ptr);
+    else if (qo_ptr->objectName().toLower() == "toolbuttonforward")
+      //      qDebug() << qo_ptr->objectName();
+      qtbf = dynamic_cast<QToolButton *>(qo_ptr);
+
+    for (const auto &it : qo_ptr->children()) {
+      qo_que.push(it);
+    }
+  }
+
+//  if (qle != nullptr)
+//    qDebug() <<  "omnibox";
+//  if (qtbb != nullptr)
+//    qDebug() <<  "toolbuttonback";
+//  if (qtbf != nullptr)
+//    qDebug() <<  "toolbuttonforward";
 }
+
 
 void HistoryDialog::LoadSettings()
 {
@@ -238,12 +290,10 @@ void HistoryDialog::CallSite(QTreeWidgetItem *item, int index)
     QString url = item->text(URLS);
     qle->setText(url);
     emit qle->returnPressed();
-
-    if (qtw != nullptr)
-      emit qtw->setCurrentIndex(0);
-    else
-      qDebug() << "Tabwidget is absent";
-
+    //    if (qtw != nullptr)
+    //      emit qtw->setCurrentIndex(0);
+    //    else
+    //      qDebug() << "Tabwidget is absent";
     emit this->close();
   }
 }
