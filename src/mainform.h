@@ -12,28 +12,28 @@
 namespace Browser {
 
 namespace Ui {
-class MainForm;
+	class MainForm;
 }
 
 class MainForm : public QWidget {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
 	explicit MainForm(QWidget *parent, HistoryDialog *hd_, Bookmark *bm_);
 
-    virtual ~MainForm();
+	virtual ~MainForm();
 
-    void go();
-
+	void go();
 	void Mark();
 
 private:
-    std::unique_ptr<Ui::MainForm> ui;
-    HistoryDialog *hd;
+	 std::unique_ptr<Ui::MainForm> ui;
+	HistoryDialog *hd;
 	Bookmark *bm;
 	QWidget* content = nullptr;
+
 private slots:
-    void SiteRequest(QString url);
+	void SiteRequest(QString url);
 };
 
 

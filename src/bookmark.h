@@ -12,27 +12,26 @@
 
 namespace Ui
 {
-  class Bookmark;
+	class Bookmark;
 }
 
 class Bookmark : public QDialog
 {
 	Q_OBJECT
 
-  public:
+public:
 	explicit Bookmark(QWidget *parent);
 	~Bookmark();
 
-	 void addUrl2(QString url, QString site_name);
+	void addUrl2(QString url, QString site_name);
 	void AddCurrentBookmark(QString url, QString site_name);
 	void SaveBookmark();
 	void SaveSettings2();
 	void set_pointers2();
 
-  private:
+private:
 	Ui::Bookmark *ui;
 	QSettings settings2;
-	QString BookmarkFileName;
 	bool BookmarkChanged;
 	bool no_set_pointers;
 	QLineEdit *qle;

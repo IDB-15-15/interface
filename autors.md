@@ -5,3 +5,5 @@
 Егор Дюдиков https://github.com/petuch
 
 Алексей Павлов  https://github.com/BrowserLMAO
+
++к кнопкам.
