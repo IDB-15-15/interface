@@ -6,14 +6,15 @@
 
 namespace Browser {
 
-class TabBar final : public QTabBar {
+class TabBar final : public QTabBar
+{
 public:
-    TabBar();
+	TabBar();
 
 protected:
-    virtual void mouseMoveEvent(QMouseEvent* event) override;
-    virtual void mousePressEvent(QMouseEvent* event) override;
-    virtual void mouseReleaseEvent(QMouseEvent* event) override;
+	virtual void mouseMoveEvent(QMouseEvent* event) override;
+	virtual void mousePressEvent(QMouseEvent* event) override;
+	virtual void mouseReleaseEvent(QMouseEvent* event) override;
 };
 
 }

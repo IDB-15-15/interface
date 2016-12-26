@@ -5,9 +5,10 @@
 
 namespace Browser {
 
-class TabWidget final : public QTabWidget {
+class TabWidget final : public QTabWidget
+{
 public:
-    TabWidget();
+	TabWidget();
 };
 
 }

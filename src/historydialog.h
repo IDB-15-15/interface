@@ -7,13 +7,12 @@
 #include <QDebug>
 #include <QSettings>
 #include <QTabWidget>
-//#include <QtGui>
 #include <memory>
 #include "ui_mainform.h"
 
 namespace Ui
 {
-  class HistoryDialog;
+	class HistoryDialog;
 }
 /*
 class myQTreeWidgetItem: public QTreeWidgetItem //: QTreeWidgetItem()
@@ -38,43 +37,44 @@ class myQTreeWidgetItem: public QTreeWidgetItem //: QTreeWidgetItem()
 */
 class HistoryDialog : public QDialog
 {
-    Q_OBJECT
+	Q_OBJECT
 
-  public:
-    explicit HistoryDialog(QWidget *parent);
-    ~HistoryDialog();
+public:
+	explicit HistoryDialog(QWidget *parent);
+	~HistoryDialog();
 
-    void addUrl(QString url, QString site_name, QDateTime date_time);
-    void AddCurrentHistory(QString url, QString site_name);
-    // сохранение истории в файле
-    void SaveHistory();
-    void SaveSettings();
-    void set_pointers();
-  private:
-    Ui::HistoryDialog *ui;
-    QSettings settings;
-    QString HistoryFileName;
-    bool HistoryChanged;
-//    bool no_set_pointers;
-    QLineEdit *qle;
-    QToolButton *qtbb;
-    QToolButton *qtbf;
-//    QTabWidget *qtw;
-    QTreeWidgetItem* current_item;
-//    int curr_tabwidget_index;
+	void addUrl(QString url, QString site_name, QDateTime date_time);
+	void AddCurrentHistory(QString url, QString site_name);
+		// сохранение истории в файле
+	void SaveHistory();
+	void SaveSettings();
+	void set_pointers();
 
-    QTreeWidgetItem *addTreeRootDate(QTreeWidget *ptrTree, QDateTime date_time);
-    void DeleteUrl(QTreeWidgetItem *currentItem);
-    void InsertItem(QTreeWidgetItem *parent, QString url, QString site_name, QDateTime date_time);
-    void LoadSettings();
-    //    загрузка истории из файла
-    void LoadHistory();
+private:
+	Ui::HistoryDialog *ui;
+	QSettings settings;
+	QString HistoryFileName;
+	bool HistoryChanged;
+	//bool no_set_pointers;
+	QLineEdit *qle;
+	QToolButton *qtbb;
+	QToolButton *qtbf;
+	//QTabWidget *qtw;
+	QTreeWidgetItem* current_item;
+	//int curr_tabwidget_index;
 
-  private slots:
-    void RemoveItem();
-    void RemoveItems();
-    void CallSite(QTreeWidgetItem *item, int index);
-    void HistoryDown(){}
+	QTreeWidgetItem *addTreeRootDate(QTreeWidget *ptrTree, QDateTime date_time);
+	void DeleteUrl(QTreeWidgetItem *currentItem);
+	void InsertItem(QTreeWidgetItem *parent, QString url, QString site_name, QDateTime date_time);
+	void LoadSettings();
+		//загрузка истории из файла
+	void LoadHistory();
+
+private slots:
+	void RemoveItem();
+	void RemoveItems();
+	void CallSite(QTreeWidgetItem *item, int index);
+	void HistoryDown(){}
 };
 
 #endif // HISTORYDIALOG_H
