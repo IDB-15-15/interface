@@ -13,20 +13,16 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLineEdit" name="omniBox"/>
+     </item>
      <item>
       <widget class="QToolButton" name="toolButtonBack">
        <property name="text">
         <string>&lt;</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="toolButtonForward">
-       <property name="text">
-        <string>&gt;</string>
        </property>
       </widget>
      </item>
@@ -38,7 +34,18 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="omniBox"/>
+      <widget class="QToolButton" name="toolButtonForward">
+       <property name="text">
+        <string>&gt;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="toolButtonGo">
+       <property name="text">
+        <string>Go</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushMark">
@@ -50,17 +57,14 @@
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QToolButton" name="toolButtonGo">
-       <property name="text">
-        <string>Go</string>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
    <item>
-    <widget class="QPlainTextEdit" name="plainTextEditContent"/>
+    <layout class="QFormLayout" name="formLayout">
+     <item row="0" column="0">
+      <layout class="QVBoxLayout" name="verticalLayout"/>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

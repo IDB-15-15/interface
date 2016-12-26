@@ -6,6 +6,9 @@
 #include <QtNetwork/QNetworkReply>
 #include <QRegExpValidator>
 
+#include "modulsystem.hpp"
+
+
 namespace Browser
 {
 
@@ -37,34 +40,47 @@ namespace Browser
   void MainForm::go()
   {
     QString url = ui->omniBox->text();
-    SiteRequest(url);
-    //Запись URL в историю посещений сайтов
-    QString site_name = "Наименование сайта";
-    hd->AddCurrentHistory(url, site_name);
+
+    if (SiteRequest(url)) {
+      //Запись URL в историю посещений сайтов
+      QString site_name = "Наименование сайта";
+      hd->AddCurrentHistory(url, site_name);
+    }
   }
 
   void MainForm::Mark()
   {
-    //Р—Р°РїРёСЃСЊ URL РІ РёСЃС‚РѕСЂРёСЋ РїРѕСЃРµС‰РµРЅРёР№ СЃР°Р№С‚РѕРІ
+    //Р вЂ”Р В°Р С—Р С‘РЎРѓРЎРЉ URL Р Р† Р С‘РЎРѓРЎвЂљР С•РЎР‚Р С‘РЎР‹ Р С—Р С•РЎРѓР ВµРЎвЂ°Р ВµР Р…Р С‘Р в„– РЎРѓР В°Р в„–РЎвЂљР С•Р Р†
     QString url = ui->omniBox->text();
     QString site_name = "Наименование сайта";
     bm->AddCurrentBookmark(url, site_name);
   }
 
-  void MainForm::SiteRequest(QString url)
+  bool MainForm::SiteRequest(QString url)
   {
     if (url.isEmpty())
-      return;
+      return false;
 
-    QNetworkAccessManager manager;
-    //    QNetworkReply *response = manager.get(QNetworkRequest {QUrl {ui->omniBox->text()}});
-    QNetworkReply *response = manager.get(QNetworkRequest {QUrl {url}});
-    QEventLoop event;
-    connect(response, &QNetworkReply::finished, &event, &QEventLoop::quit);
-    event.exec();
-    QString html = response->readAll();
-    html.remove(QRegExp("<[^>]*>"));
-    ui->plainTextEditContent->setPlainText(html.simplified());
+    //    QNetworkAccessManager manager;
+    //    //    QNetworkReply *response = manager.get(QNetworkRequest {QUrl {ui->omniBox->text()}});
+    //    QNetworkReply *response = manager.get(QNetworkRequest {QUrl {url}});
+    //    QEventLoop event;
+    //    connect(response, &QNetworkReply::finished, &event, &QEventLoop::quit);
+    //    event.exec();
+    //    QString html = response->readAll();
+    //    html.remove(QRegExp("<[^>]*>"));
+    //    ui->plainTextEditContent->setPlainText(html.simplified());
+    Network::NetworkRes res;
+    res = Network::give_result(url);
+    Parser::Tree tree = Parser::parse(&res);
+    Parser::Tree::Tag root = boost::get<Parser::Tree::Tag>(tree.root);
+    QWidget *get = Render::render(tree.root);
+
+    if (get != nullptr) {
+      ui->verticalLayout->addWidget(get);
+      return true;
+    } else
+      return false;
   }
 
 } // namespace Browser
